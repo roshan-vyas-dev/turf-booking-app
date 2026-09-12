@@ -7,7 +7,19 @@ const authMiddleware = (req, res, next) => {
     return res.status(401).json({ message: "Authorization header missing" });
   }
 
+  if (!authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({
+      message: "Invalid authorization format",
+    });
+  }
+
   const authParts = authHeader.split(" ");
+
+  if (!authParts[1]) {
+    return res.status(401).json({
+      message: "Token missing",
+    });
+  }
 
   const token = authParts[1];
 
@@ -17,11 +29,9 @@ const authMiddleware = (req, res, next) => {
     req.user = decoded;
 
     next();
-
   } catch (error) {
-    res.status(401).json({ message: "Invalid or expired token" });
+    return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
-
 
 module.exports = authMiddleware;
