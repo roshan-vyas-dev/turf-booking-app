@@ -35,4 +35,20 @@ const getAllTurfs = async (req, res) => {
   }
 };
 
-module.exports = { createTurf,getAllTurfs };
+const getTurfById = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const turf = await Turf.findById(id);
+
+    if (!turf) {
+      return res.status(404).json({ message: "Turf Not found" });
+    }
+
+    return res.status(200).json({ turf });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { createTurf, getAllTurfs,getTurfById };
