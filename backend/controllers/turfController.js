@@ -15,15 +15,24 @@ const createTurf = async (req, res) => {
     pricePerHour,
     images,
     availableSlots,
-    createdBy: req.user.userId
+    createdBy: req.user.userId,
   });
 
   await turf.save();
-  
+
   return res.status(201).json({
-    turf
-  })
+    turf,
+  });
 };
 
+const getAllTurfs = async (req, res) => {
+  try {
+    const turfs = await Turf.find();
 
-module.exports = {createTurf};
+    return res.status(200).json({ turfs });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { createTurf,getAllTurfs };
