@@ -57,16 +57,42 @@ const updateTurf = async (req, res) => {
 
     const updates = req.body;
 
-    const turf = await Turf.findByIdAndUpdate(id, updates, { returnDocument: "after" });
+    const turf = await Turf.findByIdAndUpdate(id, updates, {
+      returnDocument: "after",
+    });
 
-    if(!turf){
-      return res.status(404).json({message:"Turf not found"});
+    if (!turf) {
+      return res.status(404).json({ message: "Turf not found" });
     }
 
-    return res.status(200).json({turf});
-
+    return res.status(200).json({ turf });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
-module.exports = { createTurf, getAllTurfs, getTurfById, updateTurf };
+
+const deleteTurf = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const turf = await Turf.findByIdAndDelete(id);
+
+    if (!turf) {
+      return res.status(404).json({ message: "Turf not found" });
+    }
+
+    return res.status(200).json({
+      message: "Turf deleted successfully"
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  createTurf,
+  getAllTurfs,
+  getTurfById,
+  updateTurf,
+  deleteTurf,
+};
