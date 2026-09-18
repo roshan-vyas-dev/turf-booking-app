@@ -54,10 +54,23 @@ const createBooking = async (req, res) => {
       message: "Booking created successfully",
       booking: newBooking,
     });
-
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
-}
+};
 
-module.exports = { createBooking };
+const getMyBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find({
+      user: req.user.userId,
+    }).populate("turf");
+
+    return res.status(200).json({
+      bookings,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { createBooking, getMyBookings };
