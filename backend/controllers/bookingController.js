@@ -73,4 +73,33 @@ const getMyBookings = async (req, res) => {
   }
 };
 
-module.exports = { createBooking, getMyBookings };
+const getBookingById = async (req, res) => {
+  try {
+    const bookingId = req.params.id;
+
+    const booking = await Booking.findById(bookingId).populate("turf");
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    if (booking.user.toString() !== req.user.userId) {
+      return res
+        .status(403)
+        .json({ message: "You are not allowed to view this booking" });
+    }
+
+    return res.status(200).json({ booking });
+
+  } catch (error) {
+    
+    if (error.name === "CastError") {
+      return res.status(400).json({
+        message: "Invalid booking ID",
+      });
+    }
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { createBooking, getMyBookings, getBookingById };
