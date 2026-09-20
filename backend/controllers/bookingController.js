@@ -90,9 +90,7 @@ const getBookingById = async (req, res) => {
     }
 
     return res.status(200).json({ booking });
-
   } catch (error) {
-    
     if (error.name === "CastError") {
       return res.status(400).json({
         message: "Invalid booking ID",
@@ -102,4 +100,41 @@ const getBookingById = async (req, res) => {
   }
 };
 
-module.exports = { createBooking, getMyBookings, getBookingById };
+const cancelBooking = async (req, res) => {
+  try {
+    const bookingId = req.params.id;
+    const booking = await Booking.findById(bookingId);
+
+    if (!booking){
+      return res.status(404).json({message:"Booking not found"});
+    }
+
+    if(booking.user.toString() !== req.user.userId && req.user.role !== "admin"){
+      return res.status(403).json({message:"Not allowed to cancel"});
+    }
+
+    if(booking.status==="cancelled"){
+      return res.status(400).json({message:"Booking is already cancelled"});
+    }
+
+    booking.status = "cancelled";
+    await booking.save();
+
+    return res.status(200).json({message:"Booking cancelled successfully",booking});
+
+  } catch (error) {
+     if (error.name === "CastError") {
+      return res.status(400).json({
+        message: "Invalid booking ID",
+      });
+    }
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  createBooking,
+  getMyBookings,
+  getBookingById,
+  cancelBooking,
+};
