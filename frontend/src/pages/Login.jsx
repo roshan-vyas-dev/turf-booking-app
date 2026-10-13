@@ -1,24 +1,35 @@
 import { useState } from "react";
 import api from "../api/axios";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const response = await api.post("/api/auth/login", {
-      email,
-      password,
-    });
+    try {
+      const response = await api.post("/api/auth/login", {
+        email,
+        password,
+      });
 
-    localStorage.setItem("token",response.data.token);
-
+      localStorage.setItem("token", response.data.token);
+      setError("");
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data?.message || "Login failed");
+    }
   };
+
   return (
     <div>
       <h1>Login</h1>
+      {error && <p>{error}</p>}
 
       <form onSubmit={handleLogin}>
         <input
@@ -37,6 +48,10 @@ function Login() {
 
         <button>Login</button>
       </form>
+
+      <p>
+        Don't have an account? <Link to="/register">Register</Link>
+      </p>
     </div>
   );
 }
