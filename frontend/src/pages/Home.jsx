@@ -1,11 +1,22 @@
 import Navbar from "../components/Navbar";
+import { useState, useEffect } from "react";
+import api from "../api/axios";
 
 function Home() {
-  const turfs = [
-    { name: "Green Arena", location: "Kochi", price: 800 },
-    { name: "Pro Kick Turf", location: "Thrissur", price: 1000 },
-    { name: "Champions Ground", location: "Kozhikode", price: 700 },
-  ];
+  const [turfs, setTurfs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    api.get("/api/turfs").then((response) => {
+      setTurfs(response.data.turfs);
+      setLoading(false);
+    }).catch(()=>{
+      setError("Failed to load turfs. Please try again.");
+      setLoading(false);
+    })
+  }, []);
+
   return (
     <div>
       <Navbar />
@@ -49,6 +60,8 @@ function Home() {
       <section className="px-6 py-12">
         <div className="mx-auto max-w-7xl">
           <h2 className="text-2xl font-bold text-gray-900">Featured Turfs</h2>
+          {error && <p className="mt-4 text-red-600">{error}</p>}
+          {loading && <p className="mt-4 text-gray-600">Loading turfs...</p>}
           <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {turfs.map((turf) => (
               <div
@@ -56,7 +69,7 @@ function Home() {
                 className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
               >
                 <img
-                  src="https://placehold.co/600x400"
+                  src={turf.images?.[0] || "https://placehold.co/600x400"}
                   alt={turf.name}
                   className="h-48 w-full object-cover"
                 />
@@ -66,17 +79,17 @@ function Home() {
                   </h3>
                   <p className="mt-1 text-sm text-gray-500">{turf.location}</p>
                   <p className="mt-3 text-lg font-semibold text-green-700">
-                    ₹{turf.price}{" "}
+                    ₹{turf.pricePerHour}{" "}
                     <span className="text-sm font-normal text-gray-500">
                       / hour
                     </span>
                   </p>
                   <button
-  type="button"
-  className="mt-4 w-full rounded-lg bg-green-600 px-4 py-2 font-semibold text-white hover:bg-green-700"
->
-  View Details
-</button>
+                    type="button"
+                    className="mt-4 w-full rounded-lg bg-green-600 px-4 py-2 font-semibold text-white hover:bg-green-700"
+                  >
+                    View Details
+                  </button>
                 </div>
               </div>
             ))}
