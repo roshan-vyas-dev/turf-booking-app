@@ -20,16 +20,14 @@ function Navbar() {
             </Link>
             <Link
               to="/login"
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
-            >
+              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md">
               Login
             </Link>
           </div>
 
           <button
             className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
+            onClick={() => setIsMenuOpen(!isMenuOpen)}>
             ☰
           </button>
         </div>
@@ -46,8 +44,7 @@ function Navbar() {
 
             <Link
               to="/login"
-              className="block rounded-lg bg-green-600 px-4 py-3 text-center text-base font-semibold text-white hover:bg-green-700"
-            >
+              className="block rounded-lg bg-green-600 px-4 py-3 text-center text-base font-semibold text-white hover:bg-green-700">
               Login
             </Link>
 
