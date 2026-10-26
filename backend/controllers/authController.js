@@ -60,7 +60,7 @@ const loginUser = async (req, res) => {
         role: user.role,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" },
+      { expiresIn: "7d" },
     );
 
     const userResponse = user.toObject();
