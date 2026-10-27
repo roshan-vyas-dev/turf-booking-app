@@ -1,6 +1,7 @@
 import Navbar from "../components/Navbar";
 import { useState, useEffect } from "react";
 import api from "../api/axios";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [turfs, setTurfs] = useState([]);
@@ -119,12 +120,12 @@ function Home() {
                         / hour
                       </span>
                     </p>
-                    <button
+                    <Link to={`/turfs/${turf._id}`}
                       type="button"
                       className="mt-4 w-full rounded-lg bg-green-600 px-4 py-2 font-semibold text-white hover:bg-green-700"
                     >
                       View Details
-                    </button>
+                    </Link>
                   </div>
                 </div>
               ))
