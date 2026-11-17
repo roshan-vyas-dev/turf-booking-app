@@ -157,7 +157,9 @@ const getMyBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({
       user: req.user.userId,
-    }).populate("turf");
+    })
+      .populate("turf")
+      .sort({ createdAt: -1 });
 
     return res.status(200).json({
       bookings,
