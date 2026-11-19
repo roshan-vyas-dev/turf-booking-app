@@ -16,7 +16,18 @@ const TurfSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    images: [String],
+    images: [
+      {
+        url: {
+          type: String,
+          required: true,
+        },
+        publicId: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
     availableSlots: [
       {
         start: {
@@ -38,5 +49,5 @@ const TurfSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const Turf = mongoose.model("Turf",TurfSchema,"turfs");
+const Turf = mongoose.model("Turf", TurfSchema, "turfs");
 module.exports = Turf;
